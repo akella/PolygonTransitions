@@ -19,23 +19,15 @@
 
 ## Installation
 
-Install dependencies:
-
+To run each demo just do:
 ```
-npm install
+npx parcel index.html
 ```
-
-Compile the code for development and start a local server:
-
+or 
 ```
-npm start
+npx parcel index1.html
 ```
-
-Create the build:
-
-```
-npm run build
-```
+After that demo should be available on http://localhost:1234.
 
 ## Credits
 
@@ -43,7 +35,7 @@ npm run build
 
 ## Misc
 
-Follow *Author*: [Twitter](), [Dribbble](), [Google+](), [GitHub]() 
+Follow *Author*: [Twitter](http://twitter.com/akella), [GitHub](https://github.com/akella) 
 
 Follow Codrops: [Twitter](http://www.twitter.com/codrops), [Facebook](http://www.facebook.com/codrops), [GitHub](https://github.com/codrops), [Instagram](https://www.instagram.com/codropsss/)
 
