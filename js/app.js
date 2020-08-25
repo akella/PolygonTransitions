@@ -44,6 +44,7 @@ export default class Sketch {
     this.paused = false;
     this.textures = []
     this.initiate(()=>{
+      this.imageAspect = this.textures[0].image.naturalHeight/this.textures[0].image.naturalWidth
       this.setupResize();
       this.addObjects();
       this.resize();
@@ -68,11 +69,14 @@ export default class Sketch {
     this.images.forEach((url,i)=>{
       let promise = new Promise(resolve => {
         that.textures[i] = new THREE.TextureLoader().load( url, resolve );
+        console.log(that.textures[i]);
+        
       });
       promises.push(promise);
     })
     Promise.all(promises).then(() => {
       cb();
+      
     });
   }
 
@@ -101,7 +105,7 @@ export default class Sketch {
     
 
     // image cover
-    this.imageAspect = 853/1280;
+    // this.imageAspect = 853/1280;
     let a1; let a2;
     if(this.height/this.width>this.imageAspect) {
       a1 =   this.imageAspect ;
