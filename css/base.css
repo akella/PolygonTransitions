@@ -237,3 +237,8 @@ a:focus {
 	top: 0;
 	left: 0;
 }
+
+
+/* .frame,.content{
+	pointer-events: none;
+} */

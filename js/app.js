@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import getGeometry from './lib/getGeometry'
 import * as dat from "dat.gui";
-let OrbitControls = require("three-orbit-controls")(THREE);
+// let OrbitControls = require("three-orbit-controls")(THREE);
 import gsap from 'gsap';
 export default class Sketch {
   constructor(options) {
@@ -39,7 +39,7 @@ export default class Sketch {
       1000
     );
     this.camera.position.set(0, 0, 2);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
     this.paused = false;
     this.textures = []
@@ -49,7 +49,7 @@ export default class Sketch {
       this.addObjects();
       this.resize();
       this.render();
-      this.settings();
+      // this.settings();
       this.nextEvent()
     })
     
