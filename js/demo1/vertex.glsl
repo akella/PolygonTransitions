@@ -1,5 +1,6 @@
 uniform float time;
 uniform float progress;
+uniform vec4 resolution;
 varying vec2 vUv;
 varying vec4 vPosition;
 varying float vProgress;
@@ -50,9 +51,11 @@ void main() {
   
   float o = 1. - offset;
   // float prog = clamp( (progress - o*0.999) /0.001,0.,1.);
-  float prog = clamp( (progress - o*0.6) /0.4,0.,1.);
+  float pr = (progress - 0.5)*(0.3 + resolution.y/resolution.x) + 0.5;
+  pr = progress;
+  float prog = clamp( (pr - o*0.6) /0.4,0.,1.);
   vProgress =  prog;
-  vProgress1 =  clamp( (progress - (o - 0.1)*0.9) /0.1,0.,1.);
+  vProgress1 =  clamp( (pr - (o - 0.1)*0.9) /0.1,0.,1.);
   // prog = easeInOutQuint(prog);
   // newpos = rotate(newpos - centroid1, vec3(1.,0.,0.),-prog*PI) + centroid1 + vec3(0.,-1.,0.)*prog*0.;
   newpos.y += easeOut(prog)*1.5*sin(PI*random);

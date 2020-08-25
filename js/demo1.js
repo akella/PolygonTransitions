@@ -8,6 +8,6 @@ const sketch = new Sketch({
   fragment: fragment,
   vertex: vertex,
   offsettop: 0.9,
-  ease: "power3.out"
+  ease: "power2.in"
 });
 

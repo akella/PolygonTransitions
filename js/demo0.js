@@ -6,10 +6,10 @@ const sketch = new Sketch({
   dom: document.getElementById('container'),
   next: document.querySelector('.nav-next'),
   detail: 10,
-  duration: 3,
+  duration: 2,
   fragment: fragment,
   vertex: vertex,
   offsettop: 0.,
-  ease: "power3.out"
+  ease: "power2.in"
 });
 
