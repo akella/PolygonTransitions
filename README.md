@@ -19,7 +19,12 @@
 
 ## Installation
 
-To run demo just do:
+To run demo you will need (Parcel)[https://parceljs.org/], either install it
+```
+npm install -g parcel-bundler
+parcel index.html
+```
+Or run without installation:
 ```
 npx parcel index.html
 ```

@@ -14,9 +14,15 @@ void main()	{
 	vec3 s = smoothstep(d * (width + 0.5), d * (width - 0.5), vBary);
 	float alpha = max(max(s.x, s.y), s.z);
 	vec3 color = vec3(alpha);
-
-
-	vec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);
+	vec2 koef;
+	if(resolution.x<resolution.y){
+		koef = vec2(resolution.x/resolution.y,1.);
+	} else{
+		koef = vec2(1., resolution.y/resolution.x);
+	}
+	// vec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);
+	vec2 newUV = (vUv - vec2(0.5))*koef + vec2(0.5);
+	// newUV = vUv; 
 	vec4 t = texture2D(texture1,newUV);
 	float opa = smoothstep(1.,0.5,vProgress);
 	opa = 1. - vProgress;

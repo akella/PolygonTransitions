@@ -39,7 +39,7 @@ export default class Sketch {
       1000
     );
     this.camera.position.set(0, 0, 2);
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
     this.paused = false;
     this.textures = []
@@ -49,7 +49,7 @@ export default class Sketch {
       this.addObjects();
       this.resize();
       this.render();
-      // this.settings();
+      this.settings();
       this.nextEvent()
     })
     
@@ -69,14 +69,11 @@ export default class Sketch {
     this.images.forEach((url,i)=>{
       let promise = new Promise(resolve => {
         that.textures[i] = new THREE.TextureLoader().load( url, resolve );
-        console.log(that.textures[i]);
-        
       });
       promises.push(promise);
     })
     Promise.all(promises).then(() => {
       cb();
-      
     });
   }
 
@@ -107,7 +104,7 @@ export default class Sketch {
     // image cover
     // this.imageAspect = 853/1280;
     let a1; let a2;
-    if(this.height/this.width>this.imageAspect) {
+    if(this.height/this.width<1) {
       a1 =   this.imageAspect ;
       a2 = 1;
     } else{
@@ -115,17 +112,23 @@ export default class Sketch {
       a2 = 1 / this.imageAspect;
     }
     this.material.uniforms.resolution.value.x = this.width;
+    this.material1.uniforms.resolution.value.x = this.width;
     this.material.uniforms.resolution.value.y = this.height;
+    this.material1.uniforms.resolution.value.y = this.height;
     this.material.uniforms.resolution.value.z = a1;
     this.material1.uniforms.resolution.value.z = a1;
     this.material.uniforms.resolution.value.w = a2;
     this.material1.uniforms.resolution.value.w = a2;
 
+
     // optional - cover with quad
     const dist  = this.camera.position.z;
     const height = 2;
     let koef = 1;
-    if(this.width>this.height) koef = this.camera.aspect
+    // if(this.width>this.height) koef = this.camera.aspect
+
+    this.nextMesh.scale.set(this.camera.aspect,1,1)
+    this.currentMesh.scale.set(this.camera.aspect,1,1)
     this.camera.fov = 2*(180/Math.PI)*Math.atan(height/(2*dist*koef));
     this.camera.updateProjectionMatrix();
   }
@@ -197,7 +200,8 @@ export default class Sketch {
     if (this.paused) return;
     if(this.material) this.material.uniforms.progress.value = this.settings.progress;
     requestAnimationFrame(this.render.bind(this));
-    if(this.rendering) this.renderer.render(this.scene, this.camera);
+    // if(this.rendering) 
+    this.renderer.render(this.scene, this.camera);
   }
 }
 
