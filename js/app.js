@@ -8,7 +8,7 @@ export default class Sketch {
 
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true
+      // antialias: true
     });
     this.detail = options.detail;
     this.nextDOM = options.next;
@@ -27,6 +27,7 @@ export default class Sketch {
     this.renderer.physicallyCorrectLights = true;
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.currentIndex = 0;
+    this.rendering = true;
 
     
     this.container.appendChild(this.renderer.domElement);
@@ -131,6 +132,7 @@ export default class Sketch {
     
     if(!this.isRunning){
       this.isRunning = true;
+      this.rendering = true;
       this.currentIndex++;
       this.nextTexture = this.textures[this.currentIndex%this.textures.length];
       this.nextnextTexture = this.textures[(this.currentIndex+1)%this.textures.length];
@@ -143,6 +145,7 @@ export default class Sketch {
           this.settings.progress = 0;
           this.material.uniforms.texture1.value = this.nextTexture;
           this.material1.uniforms.texture1.value = this.nextnextTexture;
+          this.rendering = false;
         }
       })
     }
@@ -170,23 +173,27 @@ export default class Sketch {
       depthTest: false,
       depthWrite: false
     });
-    this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+    
     let geo = getGeometry(this.detail,this.offsettop);
     this.material1 = this.material.clone()
     let t = this.textures[1];
     this.material1.uniforms.texture1.value = t;
     this.currentMesh = new THREE.Mesh(geo, this.material);
     this.nextMesh = new THREE.Mesh(geo, this.material1);
+    
     this.nextMesh.position.z = -0.0001;
     this.scene.add(this.currentMesh);
     this.scene.add(this.nextMesh);
+    // this.geometry = new THREE.PlaneGeometry(1, 1, 10, 10);
+    // this.testMesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({color:0x000000,wireframe: true}));
+    // this.scene.add(this.testMesh);
   }
 
   render() {
     if (this.paused) return;
     if(this.material) this.material.uniforms.progress.value = this.settings.progress;
     requestAnimationFrame(this.render.bind(this));
-    this.renderer.render(this.scene, this.camera);
+    if(this.rendering) this.renderer.render(this.scene, this.camera);
   }
 }
 

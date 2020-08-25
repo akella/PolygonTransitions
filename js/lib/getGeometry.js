@@ -82,7 +82,6 @@ export default function getGeometry(detail,offsettop){
       randoms.push(r,r,r);
       let c1 = [i*gran + currentShift - width/2,currentheight - height/2,0]
       
-      // console.log(o,o1);
       control0.push(...ctrl0,...ctrl0,...ctrl0)
       control1.push(...ctrl1,...ctrl1,...ctrl1)
 

@@ -19,13 +19,9 @@
 
 ## Installation
 
-To run each demo just do:
+To run demo just do:
 ```
 npx parcel index.html
-```
-or 
-```
-npx parcel index1.html
 ```
 After that demo should be available on http://localhost:1234.
 
