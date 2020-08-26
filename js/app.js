@@ -102,14 +102,13 @@ export default class Sketch {
     
 
     // image cover
-    // this.imageAspect = 853/1280;
     let a1; let a2;
-    if(this.height/this.width<1) {
-      a1 =   this.imageAspect ;
-      a2 = 1;
-    } else{
+    if(this.height/this.width<this.imageAspect) {
+      a2 =   (1/this.imageAspect)*this.height/this.width ;
       a1 = 1;
-      a2 = 1 / this.imageAspect;
+    } else{
+      a2 = 1;
+      a1= this.width/this.height* this.imageAspect;
     }
     this.material.uniforms.resolution.value.x = this.width;
     this.material1.uniforms.resolution.value.x = this.width;
@@ -119,6 +118,7 @@ export default class Sketch {
     this.material1.uniforms.resolution.value.z = a1;
     this.material.uniforms.resolution.value.w = a2;
     this.material1.uniforms.resolution.value.w = a2;
+    console.log(this.material.uniforms.resolution.value);
 
 
     // optional - cover with quad
