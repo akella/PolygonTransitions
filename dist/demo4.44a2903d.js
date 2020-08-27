@@ -44697,17 +44697,16 @@ var Sketch = /*#__PURE__*/function () {
       this.height = this.container.offsetHeight;
       this.renderer.setSize(this.width, this.height);
       this.camera.aspect = this.width / this.height; // image cover
-      // this.imageAspect = 853/1280;
 
       var a1;
       var a2;
 
-      if (this.height / this.width < 1) {
-        a1 = this.imageAspect;
-        a2 = 1;
-      } else {
+      if (this.height / this.width < this.imageAspect) {
+        a2 = 1 / this.imageAspect * this.height / this.width;
         a1 = 1;
-        a2 = 1 / this.imageAspect;
+      } else {
+        a2 = 1;
+        a1 = this.width / this.height * this.imageAspect;
       }
 
       this.material.uniforms.resolution.value.x = this.width;
@@ -44717,7 +44716,8 @@ var Sketch = /*#__PURE__*/function () {
       this.material.uniforms.resolution.value.z = a1;
       this.material1.uniforms.resolution.value.z = a1;
       this.material.uniforms.resolution.value.w = a2;
-      this.material1.uniforms.resolution.value.w = a2; // optional - cover with quad
+      this.material1.uniforms.resolution.value.w = a2;
+      console.log(this.material.uniforms.resolution.value); // optional - cover with quad
 
       var dist = this.camera.position.z;
       var height = 2;
@@ -44818,7 +44818,7 @@ var Sketch = /*#__PURE__*/function () {
 
 exports.default = Sketch;
 },{"three":"node_modules/three/build/three.module.js","./lib/getGeometry":"js/lib/getGeometry.js","dat.gui":"node_modules/dat.gui/build/dat.gui.module.js","gsap":"node_modules/gsap/index.js"}],"js/demo4/fragment.glsl":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\nuniform float time;\nuniform float progress;\nuniform sampler2D texture1;\nuniform vec4 resolution;\nvarying vec2 vUv;\nvarying float vProgress;\nvarying float vProgress1;\nfloat PI = 3.141592653589793238;\nvarying vec3 vBary;\nvoid main()\t{\n\n\tfloat width =2.5*vProgress1;\n\tvec3 d = fwidth(vBary);\n\tvec3 s = smoothstep(d * (width + 0.5), d * (width - 0.5), vBary);\n\tfloat alpha = max(max(s.x, s.y), s.z);\n\tvec3 color = vec3(alpha);\n\n\tvec2 koef;\n\tif(resolution.x<resolution.y){\n\t\tkoef = vec2(resolution.x/resolution.y,1.);\n\t} else{\n\t\tkoef = vec2(1., resolution.y/resolution.x);\n\t}\n\t// vec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);\n\tvec2 newUV = (vUv - vec2(0.5))*koef + vec2(0.5);\n\tvec4 t = texture2D(texture1,newUV);\n\tfloat opa = smoothstep(1.,0.5,vProgress);\n\topa = 1. - vProgress;\n\tgl_FragColor = vec4(vUv,0.0,opa);\n\topa = smoothstep(0.5,1.,opa);\n\tgl_FragColor = vec4(t.rgb + 1.*color*vProgress1,opa);\n\t// gl_FragColor.rgb = mix(gl_FragColor.rgb,vec3(1.,0.,0.),1. - opa);\n\t// gl_FragColor = vec4(color,opa);\n}";
+module.exports = "#define GLSLIFY 1\nuniform float time;\nuniform float progress;\nuniform sampler2D texture1;\nuniform vec4 resolution;\nvarying vec2 vUv;\nvarying float vProgress;\nvarying float vProgress1;\nfloat PI = 3.141592653589793238;\nvarying vec3 vBary;\nvoid main()\t{\n\n\tfloat width =2.5*vProgress1;\n\tvec3 d = fwidth(vBary);\n\tvec3 s = smoothstep(d * (width + 0.5), d * (width - 0.5), vBary);\n\tfloat alpha = max(max(s.x, s.y), s.z);\n\tvec3 color = vec3(alpha);\n\n\tvec2 newUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);\n\tvec4 t = texture2D(texture1,newUV);\n\tfloat opa = smoothstep(1.,0.5,vProgress);\n\topa = 1. - vProgress;\n\tgl_FragColor = vec4(vUv,0.0,opa);\n\topa = smoothstep(0.5,1.,opa);\n\tgl_FragColor = vec4(t.rgb + 1.*color*vProgress1,opa);\n\t// gl_FragColor.rgb = mix(gl_FragColor.rgb,vec3(1.,0.,0.),1. - opa);\n\t// gl_FragColor = vec4(color,opa);\n}";
 },{}],"js/demo4/vertex.glsl":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\nuniform float time;\nuniform float progress;\nvarying vec2 vUv;\nvarying vec4 vPosition;\nvarying float vProgress;\nvarying float vProgress1;\nuniform vec2 pixels;\n\nattribute float offset;\nattribute float random;\nattribute vec3 centroid1;\nattribute vec3 control0;\nattribute vec3 control1;\nattribute vec3 bary;\nvarying vec3 vBary;\n\nmat4 rotationMatrix(vec3 axis, float angle) {\n    axis = normalize(axis);\n    float s = sin(angle);\n    float c = cos(angle);\n    float oc = 1.0 - c;\n    \n    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,\n                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,\n                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,\n                0.0,                                0.0,                                0.0,                                1.0);\n}\n\nvec3 rotate(vec3 v, vec3 axis, float angle) {\n  mat4 m = rotationMatrix(axis, angle);\n  return (m * vec4(v, 1.0)).xyz;\n}\n\nfloat easeOutQuint(float t){\n  return 1. + (--t) * t * t * t * t;\n}\nfloat easeOut(float t){\n  return  t * t * t;\n}\n\nvec3 cubicBezier(vec3 p0, vec3 c0, vec3 c1, vec3 p1, float t) {\n    float tn = 1.0 - t;\n\n    return tn * tn * tn * p0 + 3.0 * tn * tn * t * c0 + 3.0 * tn * t * t * c1 + t * t * t * p1;\n}\n\nvec2 cubicBezier(vec2 p0, vec2 c0, vec2 c1, vec2 p1, float t) {\n    float tn = 1.0 - t;\n\n    return tn * tn * tn * p0 + 3.0 * tn * tn * t * c0 + 3.0 * tn * t * t * c1 + t * t * t * p1;\n}\n\nvec3 bezier4(vec3 a, vec3 b, vec3 c, vec3 d, float t) {\n    return mix(mix(mix(a, b, t), mix(b, c, t), t), mix(mix(b, c, t), mix(c, d, t), t), t);\n  }\n\n  float easeInOutQuint(float t){\n    return t < 0.5 ? 16.0 * t * t * t * t * t : 1.0 + 16.0 * (--t) * t * t * t * t;\n  }\n\nvoid main() {\n  float PI = 3.141592653589793238;\n  vUv = uv;\n  vBary = bary;\n\n  vec3 newpos = position;\n  \n  float o = 1. - offset;\n  // float prog = clamp( (progress - o*0.999) /0.001,0.,1.);\n  float prog = clamp( (progress - o*0.6) /0.4,0.,1.);\n  vProgress =  prog;\n  vProgress1 =  clamp( (progress - clamp(o - 0.2,-0.,1.)*0.6) /0.4,0.,1.);\n  // newpos = bezier4(newpos, control0, control1, newpos, easeOut(prog));\n  // newpos.z = abs(newpos.z);\n  // prog = easeInOutQuint(prog);\n  newpos = rotate(newpos , vec3(0.,1.,0.),-prog*PI) + 0.*centroid1 + vec3(0.,-1.,0.)*prog*0.;\n  // newpos.y += prog*1.5*sin(PI*random);\n  // newpos.x += prog*1.5*cos(PI*random);\n  // newpos.x += sin(10.*offset)*prog;\n  // newpos.y += 0.4*sin(time + offset);\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( newpos, 1.0 );\n}";
 },{}],"js/demo4.js":[function(require,module,exports) {
@@ -44840,7 +44840,7 @@ var sketch = new _app.default({
   vertex: _vertex.default,
   offsettop: .5
 });
-},{"./app.js":"js/app.js","./demo4/fragment.glsl":"js/demo4/fragment.glsl","./demo4/vertex.glsl":"js/demo4/vertex.glsl"}],"../../.npm/_npx/83980/lib/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./app.js":"js/app.js","./demo4/fragment.glsl":"js/demo4/fragment.glsl","./demo4/vertex.glsl":"js/demo4/vertex.glsl"}],"../../.npm/_npx/93448/lib/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -44868,7 +44868,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64223" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53678" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -45044,5 +45044,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../.npm/_npx/83980/lib/node_modules/parcel/src/builtins/hmr-runtime.js","js/demo4.js"], null)
+},{}]},{},["../../.npm/_npx/93448/lib/node_modules/parcel/src/builtins/hmr-runtime.js","js/demo4.js"], null)
 //# sourceMappingURL=/demo4.44a2903d.js.map

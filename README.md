@@ -1,20 +1,12 @@
-*How to use this template:*
+# Experimental Polygon Transitions with WebGL
 
-- The general styles for the demo page are in css/base.css
-- The README.md can be used to add credits of resources used
-- For writing the tutorial, take a look at https://github.com/crnacura/CodropsTemplate/wiki/Writing-the-article
-- Delete this 'how to' in the final version and leave the following (fill in title/description, credits and social links, we'll do the rest):
+Some experimental animations using triangles for image transitions with WebGL.
 
+![Triangles](https://tympanus.net/codrops/wp-content/uploads/2020/08/Triangles_Featured.jpg)
 
-# The Title
+[Article on Codrops](https://tympanus.net/codrops/?p=50876)
 
-*Description*, *author*
-
-![Image Title](link)
-
-[Article on Codrops](https://tympanus.net/codrops/?p=)
-
-[Demo](http://tympanus.net/Development/.../)
+[Demo](https://github.com/akella/PolygonTransitions/archive/master.zip)
 
 
 ## Installation
@@ -30,13 +22,9 @@ npx parcel index.html
 ```
 After that demo should be available on http://localhost:1234.
 
-## Credits
-
-*third party resources*
-
 ## Misc
 
-Follow *Author*: [Twitter](http://twitter.com/akella), [GitHub](https://github.com/akella) 
+Follow Yuriy: [Twitter](http://twitter.com/akella), [GitHub](https://github.com/akella) 
 
 Follow Codrops: [Twitter](http://www.twitter.com/codrops), [Facebook](http://www.facebook.com/codrops), [GitHub](https://github.com/codrops), [Instagram](https://www.instagram.com/codropsss/)
 

@@ -20,6 +20,34 @@ body {
 	font-weight: 300;
 }
 
+.demo-1 {
+	--color-text: #fff;
+    --color-bg: #000;
+    --color-link: #edc4a4;
+    --color-link-hover: #fff;
+}
+
+.demo-2 {
+	--color-text: #fff;
+    --color-bg: #000;
+    --color-link: #b7491a;
+    --color-link-hover: #fff;
+}
+
+.demo-3 {
+	--color-text: #fff;
+    --color-bg: #000;
+    --color-link: #ebea9b;
+    --color-link-hover: #fff;
+}
+
+.demo-4 {
+	--color-text: #000;
+    --color-bg: #fff;
+    --color-link: #3f51b5;
+    --color-link-hover: #000;
+}
+
 /* Page Loader */
 .js .loading::before,
 .js .loading::after {
