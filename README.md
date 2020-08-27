@@ -11,7 +11,7 @@ Some experimental animations using triangles for image transitions with WebGL.
 
 ## Installation
 
-To run demo you will need (Parcel)[https://parceljs.org/], either install it
+To run demo you will need [Parcel](https://parceljs.org/), either install it
 ```
 npm install -g parcel-bundler
 parcel index.html
