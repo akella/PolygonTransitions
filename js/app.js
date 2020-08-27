@@ -50,11 +50,10 @@ export default class Sketch {
       this.resize();
       this.render();
       // this.settings();
-      this.nextEvent()
+      this.nextEvent();
+      document.body.classList.remove('loading')
     })
     
-
-
   }
 
   nextEvent(){

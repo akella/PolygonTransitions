@@ -20,6 +20,20 @@ body {
 	font-weight: 300;
 }
 
+body #cdawrap {
+	--cda-left: auto;
+    --cda-right: 3rem;
+    --cda-top: 6rem;
+    --cda-bottom: auto;
+    --cda-text-align: right;
+    --footer-align: end;
+    --cda-width: 255px;
+    --cda-text-size: 12px;
+    --cda-text-color: var(--color-text);
+    --cda-footer-fontsize: 10px;
+    --cda-footer-color: var(--color-text);
+}
+
 .demo-1 {
 	--color-text: #fff;
     --color-bg: #000;
